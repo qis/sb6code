@@ -1,5 +1,5 @@
 /*
- * Copyright © 2012-2013 Graham Sellers
+ * Copyright Â© 2012-2013 Graham Sellers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -23,7 +23,7 @@
 
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#include "GL/gl3w.h"
+#include <sb6.h>
 
 #include <cstdio>
 

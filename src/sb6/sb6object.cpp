@@ -1,5 +1,5 @@
 /*
- * Copyright © 2012-2013 Graham Sellers
+ * Copyright Â© 2012-2013 Graham Sellers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -23,7 +23,6 @@
 
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#include "GL/gl3w.h"
 #include <object.h>
 
 #include <stdio.h>
@@ -173,9 +172,6 @@ void object::free()
 void object::render_sub_object(unsigned int object_index, unsigned int instance_count, unsigned int base_instance)
 {
     glBindVertexArray(vao);
-
-#if defined (__APPLE__)
-
     if (index_buffer != 0)
     {
         glDrawElementsInstanced(GL_TRIANGLES,
@@ -191,25 +187,6 @@ void object::render_sub_object(unsigned int object_index, unsigned int instance_
                               sub_object[object_index].count,
                               instance_count);
     }
-#else
-    if (index_buffer != 0)
-    {
-        glDrawElementsInstancedBaseInstance(GL_TRIANGLES,
-                                            num_indices,
-                                            index_type,
-                                            0,
-                                            instance_count,
-                                            base_instance);
-    }
-    else
-    {
-        glDrawArraysInstancedBaseInstance(GL_TRIANGLES,
-                                           sub_object[object_index].first,
-                                           sub_object[object_index].count,
-                                           instance_count,
-                                           base_instance);
-    }
-#endif
 }
 
 }

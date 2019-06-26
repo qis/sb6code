@@ -1,5 +1,5 @@
 /*
- * Copyright © 2012-2013 Graham Sellers
+ * Copyright Â© 2012-2013 Graham Sellers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -167,7 +167,7 @@ void multidrawindirect_app::render(double currentTime)
     static const float one = 1.0f;
     static const float black[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
-        
+
     static double last_time = 0.0;
     static double total_time = 0.0;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2012-2013 Graham Sellers
+ * Copyright Â© 2012-2013 Graham Sellers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -202,7 +202,7 @@ class blendmatrix_app : public sb6::application
         {
             for (i = 0; i < num_blend_funcs; i++)
             {
-                vmath::mat4 mv_matrix = 
+                vmath::mat4 mv_matrix =
                     vmath::translate(9.5f - x_scale * float(i),
                                      7.5f - y_scale * float(j),
                                      -18.0f) *

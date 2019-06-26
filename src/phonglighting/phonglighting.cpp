@@ -1,5 +1,5 @@
 /*
- * Copyright © 2012-2013 Graham Sellers
+ * Copyright Â© 2012-2013 Graham Sellers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -193,7 +193,7 @@ void phonglighting_app::onKey(int key, int action)
     {
         switch (key)
         {
-            case 'R': 
+            case 'R':
                 load_shaders();
                 break;
             case 'V':

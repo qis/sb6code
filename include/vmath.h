@@ -12,7 +12,7 @@ template <typename T, const int w, const int h> class matNM;
 template <typename T, const int len> class vecN;
 template <typename T> class Tquaternion;
 
-template <typename T> 
+template <typename T>
 inline T degrees(T angleInRadians)
 {
     return angleInRadians * static_cast<T>(180.0/M_PI);
@@ -32,11 +32,11 @@ struct random
         static unsigned int seed = 0x13371337;
         unsigned int res;
         unsigned int tmp;
-        
+
         seed *= 16807;
-        
+
         tmp = seed ^ (seed >> 4) ^ (seed << 15);
-        
+
         res = (tmp >> 9) | 0x3F800000;
 
         return static_cast<T>(res);
@@ -993,7 +993,7 @@ static inline mat4 frustum(float left, float right, float bottom, float top, flo
 
 static inline mat4 perspective(float fovy, float aspect, float n, float f)
 {
-    float q = 1.0f / tan(radians(0.5f * fovy));
+    float q = 1.0f / tanf(radians(0.5f * fovy));
     float A = q / aspect;
     float B = (n + f) / (n - f);
     float C = (2.0f * n * f) / (n - f);

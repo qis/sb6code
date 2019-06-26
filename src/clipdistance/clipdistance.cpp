@@ -1,5 +1,5 @@
 /*
- * Copyright © 2012-2013 Graham Sellers
+ * Copyright Â© 2012-2013 Graham Sellers
  *
  * This code is part of the OpenGL SuperBible, 6th Edition.
  *
@@ -151,7 +151,7 @@ void clipdistance_app::onKey(int key, int action)
             case 'P':
                 paused = !paused;
                 break;
-            case 'R': 
+            case 'R':
                 load_shaders();
                 break;
         }

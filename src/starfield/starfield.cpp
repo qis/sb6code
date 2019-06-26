@@ -1,5 +1,5 @@
 /*
- * Copyright © 2012-2013 Graham Sellers
+ * Copyright Â© 2012-2013 Graham Sellers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -190,7 +190,9 @@ class starfield_app : public sb6::application
 
         glBindVertexArray(star_vao);
 
+#ifdef GL_PROGRAM_POINT_SIZE
         glEnable(GL_PROGRAM_POINT_SIZE);
+#endif
         glDrawArrays(GL_POINTS, 0, NUM_STARS);
     }
 

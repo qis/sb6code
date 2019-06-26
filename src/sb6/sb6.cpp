@@ -1,5 +1,5 @@
 /*
- * Copyright © 2012-2013 Graham Sellers
+ * Copyright Â© 2012-2013 Graham Sellers
  *
  * This code is part of the OpenGL SuperBible, 6th Edition.
  *
@@ -23,18 +23,11 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include "sb6.h"
+#include <sb6.h>
 
 sb6::application * sb6::application::app = 0;
 
-#include <GL/glext.h>
-
 #include <string.h>
-
-void * sb6GetProcAddress(const char * funcname)
-{
-    return gl3wGetProcAddress(funcname);
-}
 
 int sb6IsExtensionSupported(const char * extname)
 {

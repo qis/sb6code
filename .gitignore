@@ -1,0 +1,6 @@
+.*
+!.gitattributes
+!.gitignore
+/bin/*
+!/bin/media/
+/build/

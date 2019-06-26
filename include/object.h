@@ -1,5 +1,5 @@
 /*
- * Copyright © 2012-2013 Graham Sellers
+ * Copyright Â© 2012-2013 Graham Sellers
  *
  * This code is part of the OpenGL SuperBible, 6th Edition.
  *
@@ -28,10 +28,9 @@
 #define __OBJECT_H__
 
 #include "sb6mfile.h"
+#include <sb6.h>
 
 #ifndef SB6M_FILETYPES_ONLY
-
-#include <GL/glcorearb.h>
 
 namespace sb6
 {

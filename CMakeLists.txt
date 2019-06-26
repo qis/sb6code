@@ -1,44 +1,43 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required(VERSION 3.14.0 FATAL_ERROR)
+project(sb6code DESCRIPTION "OpenGL SuperBible 6th Edition Examples" VERSION 6.0.0 LANGUAGES CXX)
 
-project (SuperBible6)
-
-LINK_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib )
-
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 if(WIN32)
-set(COMMON_LIBS sb6 optimized GLFW_r32 debug GLFW_d32)
-elif (UNIX)
-set(COMMON_LIBS sb6 glfw ${GLFW_LIBRARIES} GL rt dl)
-else()
-set(COMMON_LIBS sb6)
+  add_definitions(-D_UNICODE -DUNICODE -DWIN32_LEAN_AND_MEAN -DNOMINMAX -DWINVER=0x0A00 -D_WIN32_WINNT=0x0A00)
+  add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE)
+  add_definitions(-D_ATL_SECURE_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS)
 endif()
 
-IF(APPLE)
-  INCLUDE_DIRECTORIES(/System/Library/Frameworks)
-  FIND_LIBRARY(COCOA_LIBRARY Cocoa)
-  FIND_LIBRARY(OpenGL_LIBRARY OpenGL)
-  FIND_LIBRARY(IOKit_LIBRARY IOKit)
-  MARK_AS_ADVANCED(COCOA_LIBRARY OpenGL_LIBRARY)
-  SET(EXTRA_LIBS ${COCOA_LIBRARY} ${IOKit_LIBRARY} ${OpenGL_LIBRARY})
-  SET(EXTRA_LIBS ${EXTRA_LIBS} /usr/local/lib/libglfw.a)
-ENDIF(APPLE)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER build)
+set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT starfield)
 
-set(COMMON_LIBS ${COMMON_LIBS} ${EXTRA_LIBS})
+file(GLOB headers CONFIGURE_DEPENDS include/*.h)
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/include PREFIX "include" FILES ${headers})
 
-add_library(sb6
-src/sb6/sb6.cpp
-src/sb6/sb6ktx.cpp
-src/sb6/sb6object.cpp
-src/sb6/sb6shader.cpp
-src/sb6/gl3w.c
-)
+file(GLOB sources CONFIGURE_DEPENDS src/sb6/*.h src/sb6/*.cpp)
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/sb6 PREFIX "src" FILES ${sources})
 
-set(RUN_DIR ${PROJECT_SOURCE_DIR}/bin)
+add_library(sb6 ${headers} ${sources})
+target_include_directories(sb6 PUBLIC include)
 
-set(EXAMPLES
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+  find_package(X11 REQUIRED)
+  target_link_libraries(sb6 PUBLIC X11::X11 dl)
+endif()
+
+find_package(unofficial-angle CONFIG REQUIRED)
+target_link_libraries(sb6 PUBLIC unofficial::angle::libEGL unofficial::angle::libGLESv2)
+
+find_package(glfw3 CONFIG REQUIRED)
+target_link_libraries(sb6 PUBLIC glfw)
+
+# TODO: Figure out if 'GLFW_DLL' should be define in case of 'VCPKG_LIBRARY_LINKAGE dynamic'.
+
+set(examples
   alienrain
   basicfbo
   blendmatrix
@@ -115,29 +114,21 @@ set(EXAMPLES
 )
 
 if (WIN32)
-  set(EXAMPLES ${EXAMPLES} win32raw)
+  list(APPEND examples win32raw)
 endif()
 
-#if(UNIX)
-#  add_executable(xraw src/xraw/xraw.c)
-#  target_link_libraries(xraw GL X11 m)
-#endif(UNIX)
+foreach(example ${examples})
+  file(GLOB example_sources CONFIGURE_DEPENDS src/${example}/*.cpp)
+  source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/${example} PREFIX "" FILES ${example_sources})
+  add_executable(${example} WIN32 ${example_sources})
+  set_target_properties(${example} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+  target_link_libraries(${example} PRIVATE sb6)
+  install(TARGETS ${example} CONFIGURATIONS Release RUNTIME DESTINATION bin)
+endforeach()
 
-foreach(EXAMPLE ${EXAMPLES})
-  add_executable(${EXAMPLE} WIN32 src/${EXAMPLE}/${EXAMPLE}.cpp)
-  target_link_libraries(${EXAMPLE} ${COMMON_LIBS})
-  if(MSVC)
-configure_file(${PROJECT_SOURCE_DIR}/build/vs2010/VisualStudioUserFile.vcproj.user.in ${CMAKE_CURRENT_BINARY_DIR}/${EXAMPLE}.vcproj.user @ONLY)
-    configure_file(${PROJECT_SOURCE_DIR}/build/vs2010/VisualStudioUserFile.vcxproj.user.in ${CMAKE_CURRENT_BINARY_DIR}/${EXAMPLE}.vcxproj.user @ONLY)
-  endif(MSVC)
-endforeach(EXAMPLE)
-
-IF (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_LINUX")
-ENDIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-
-include_directories( include )
-include_directories( extern/glfw-2.7.6/include )
-
-ADD_CUSTOM_TARGET(debug ${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE:STRING=Debug ${PROJECT_SOURCE_DIR})
-ADD_CUSTOM_TARGET(release ${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE:STRING=Release ${PROJECT_SOURCE_DIR})
+if(WIN32)
+  install(CODE [[
+    file(GLOB libraries ${CMAKE_BINARY_DIR}/*.dll ${CMAKE_BINARY_DIR}/Release/*.dll)
+    file(INSTALL ${libraries} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+  ]])
+endif()

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2012-2013 Graham Sellers
+ * Copyright Â© 2012-2013 Graham Sellers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -147,7 +147,7 @@ public:
 
         int * e = (int *)glMapBufferRange(GL_ELEMENT_ARRAY_BUFFER, 0, lines * 2 * sizeof(int), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
 
-        for (j = 0; j < POINTS_Y; j++)  
+        for (j = 0; j < POINTS_Y; j++)
         {
             for (i = 0; i < POINTS_X - 1; i++)
             {
@@ -250,7 +250,7 @@ private:
         m_update_program = glCreateProgram();
         glAttachShader(m_update_program, vs);
 
-        static const char * tf_varyings[] = 
+        static const char * tf_varyings[] =
         {
             "tf_position_mass",
             "tf_velocity"
@@ -273,7 +273,7 @@ private:
         m_render_program = glCreateProgram();
         glAttachShader(m_render_program, vs);
         glAttachShader(m_render_program, fs);
-        
+
         glLinkProgram(m_render_program);
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright � 2012-2013 Graham Sellers
+ * Copyright ï¿½ 2012-2013 Graham Sellers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -22,6 +22,7 @@
  */
 
 #include "sb6ktx.h"
+#include <sb6.h>
 
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS 1
@@ -30,10 +31,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-
-// #include <sb6.h>
-
-#include "GL/gl3w.h"
 
 namespace sb6
 {
@@ -91,10 +88,8 @@ static unsigned int calculate_stride(const header& h, unsigned int width, unsign
             break;
         case GL_RG:     channels = 2;
             break;
-        case GL_BGR:
         case GL_RGB:    channels = 3;
             break;
-        case GL_BGRA:
         case GL_RGBA:   channels = 4;
             break;
     }
@@ -162,18 +157,7 @@ unsigned int load(const char * filename, unsigned int tex)
     }
 
     // Guess target (texture type)
-    if (h.pixelheight == 0)
-    {
-        if (h.arrayelements == 0)
-        {
-            target = GL_TEXTURE_1D;
-        }
-        else
-        {
-            target = GL_TEXTURE_1D_ARRAY;
-        }
-    }
-    else if (h.pixeldepth == 0)
+    if (h.pixeldepth == 0)
     {
         if (h.arrayelements == 0)
         {
@@ -236,10 +220,6 @@ unsigned int load(const char * filename, unsigned int tex)
 
     switch (target)
     {
-        case GL_TEXTURE_1D:
-            glTexStorage1D(GL_TEXTURE_1D, h.miplevels, h.glinternalformat, h.pixelwidth);
-            glTexSubImage1D(GL_TEXTURE_1D, 0, 0, h.pixelwidth, h.glformat, h.glinternalformat, data);
-            break;
         case GL_TEXTURE_2D:
             glTexStorage2D(GL_TEXTURE_2D, h.miplevels, h.glinternalformat, h.pixelwidth, h.pixelheight);
             {
@@ -263,10 +243,6 @@ unsigned int load(const char * filename, unsigned int tex)
         case GL_TEXTURE_3D:
             glTexStorage3D(GL_TEXTURE_3D, h.miplevels, h.glinternalformat, h.pixelwidth, h.pixelheight, h.pixeldepth);
             glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, h.pixelwidth, h.pixelheight, h.pixeldepth, h.glformat, h.gltype, data);
-            break;
-        case GL_TEXTURE_1D_ARRAY:
-            glTexStorage2D(GL_TEXTURE_1D_ARRAY, h.miplevels, h.glinternalformat, h.pixelwidth, h.arrayelements);
-            glTexSubImage2D(GL_TEXTURE_1D_ARRAY, 0, 0, 0, h.pixelwidth, h.arrayelements, h.glformat, h.gltype, data);
             break;
         case GL_TEXTURE_2D_ARRAY:
             glTexStorage3D(GL_TEXTURE_2D_ARRAY, h.miplevels, h.glinternalformat, h.pixelwidth, h.pixelheight, h.arrayelements);

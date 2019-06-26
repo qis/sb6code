@@ -1,6 +1,7 @@
 #ifndef __ARCBALL_H__
 #define __ARCBALL_H__
 
+#include <sb6.h>
 #include <vmath.h>
 
 namespace sb6
